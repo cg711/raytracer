@@ -26,7 +26,7 @@ class camera {
             initialize();
 
             // Render
-            // std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
+            std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
             // auto image_size = image_width * image_height;
 
             for (int j = 0; j < image_height; j++) {

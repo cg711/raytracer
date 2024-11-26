@@ -9,6 +9,12 @@ class interval {
 
         interval(double min, double max) : min(min), max(max) {}
 
+        // interval from two intervals, take min and max from each
+        interval(const interval& a, const interval& b) {
+            min = a.min <= b.min ? a.min : b.min;
+            max = a.max >= b.max ? a.max : b.max;
+        }
+
         double size() const {
             return max - min;
         }
