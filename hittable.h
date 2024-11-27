@@ -12,6 +12,8 @@ class hit_record {
         vec3 normal;
         shared_ptr<material> mat;
         double t;
+        double u; // texture coord
+        double v; // texture coord
         bool front_face;
 
         // Sets the hit record normal vector
