@@ -8,6 +8,10 @@ class material {
     public:
         virtual ~material() = default;
 
+        virtual color emitted(double u, double v, const point3& p) const {
+            return color(0,0,0);
+        }
+
         virtual bool scatter(
             const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered) const {
                 return false;
@@ -92,6 +96,37 @@ class dielectric : public material {
             return r0 + (1 - r0) * std::pow((1 - cosine),5);
         }
 
+};
+
+// point light class
+class diffuse_light : public material {
+    public:
+        diffuse_light(shared_ptr<texture> texture) : tex(texture) {}
+        diffuse_light(const color& emit) : tex(make_shared<solid_color>(emit)) {}
+
+        color emitted(double u, double v, const point3& p) const override {
+            return tex->value(u,v,p);
+        }
+    private:
+        shared_ptr<texture> tex;
+};
+
+// Material whose scatter picks a random uniform direction (used for volumes)
+class isotropic : public material {
+    public:
+        // solid color volume material
+        isotropic(const color& albedo) : texture(make_shared<solid_color>(albedo)) {}
+
+        // textured volume material
+        isotropic(shared_ptr<texture> texture) : texture(texture) {}
+
+        bool scatter(const ray& r_in, const hit_record& rec, color& attentuation, ray& scattered) const override {
+            scattered = ray(rec.p, random_unit_vector(), r_in.time());
+            attentuation = texture->value(rec.u, rec.v, rec.p);
+            return true;
+        }
+    private:
+        shared_ptr<texture> texture;
 };
 
 #endif

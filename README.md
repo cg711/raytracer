@@ -1,11 +1,5 @@
 # TODO
 
-- Implement tris/quads
-  - Texture Mapping
-  - Obj -> raytracer parsing
-  - Other shit
-  - Profit
-
 ## Mandatory
 
 - [x] A camera with configurable position, orientation, and field of view
@@ -21,10 +15,16 @@
 - [x] A spatial subdivision acceleration structure of your choice
   - [x] BVH
 - [x] Specular, diffuse, and dielectric materials (per first volume of Ray Tracing in One Weekend series)
-- [ ] Emissive materials (lights)
+- [x] Emissive materials (lights)
 
 ### Extra Needed (25 base, 75 for A)
 - [x] Motion blur (10)
-- [ ] Volume rendering (smoke, clouds, etc.) (10)
+- [x] Volume rendering (smoke, clouds, etc.) (10)
 - [x] Perlin noise (10)
-- [ ] Quads (10)
+- [x] Quads (10)
+
+### Compile
+
+```
+g++ -std=c++11 main.cpp -o main
+```

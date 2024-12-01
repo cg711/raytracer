@@ -33,6 +33,7 @@ class interval {
             return x;
         }
 
+        // increase interval padding by specified delta
         interval expand(double delta) const {
             auto padding = delta/2;
             return interval(min - padding, max + padding);
@@ -43,5 +44,13 @@ class interval {
 
 const interval interval::empty = interval(+infinity, -infinity);
 const interval interval::universe = interval(-infinity,+infinity);
+
+interval operator+(const interval& ival, double displacement) {
+    return interval(ival.min + displacement, ival.max + displacement);
+}
+
+interval operator+(double displacement, const interval& ival) {
+    return ival + displacement;
+}
 
 #endif
