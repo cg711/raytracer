@@ -334,10 +334,11 @@ void obj_test_scene() {
 
     // Mats
     auto red = make_shared<metal>(color(.65, .05, .05), 0.5);
-    // auto diamond_block_texture = make_shared<image_texture>("diamond.jpg");
+    auto ceramic_texture = make_shared<image_texture>("ceramic.jpg");
 
     // Solid color triangle
-    world.add(mesh("teapot.obj", red));
+    world.add(mesh("teapot.obj", make_shared<metal>(ceramic_texture, 0.8)));
+    // world.add
 
     // Textured triangle
     // world.add(make_shared<tri>(point3( 3,-2, 1), vec3(0, 0, 4), vec3(0, 4, 0), make_shared<lambertian>(diamond_block_texture)));
@@ -353,6 +354,37 @@ void obj_test_scene() {
     cam.vfov     = 80;
     cam.lookfrom = point3(0,5,10);
     cam.lookat   = point3(0,0,0);
+    cam.vup      = vec3(0,1,0);
+
+    cam.defocus_angle = 0;
+
+    cam.render(world);
+}
+
+void skybox_test_scene() {
+    hittable_list world;
+
+    // skybox textures
+    auto left = make_shared<image_texture>("skybox/left.jpg");
+    auto right = make_shared<image_texture>("skybox/right.jpg");
+    auto top = make_shared<image_texture>("skybox/top.jpg");
+    auto bottom = make_shared<image_texture>("skybox/bottom.jpg");
+    auto front = make_shared<image_texture>("skybox/front.jpg");
+    auto back = make_shared<image_texture>("skybox/back.jpg");
+
+    world.add(cube_map(left,right,front,back,top,bottom,100));
+
+    camera cam;
+
+    cam.aspect_ratio      = 1.0;
+    cam.image_width       = 400;
+    cam.samples_per_pixel = 100;
+    cam.max_depth         = 500;
+    cam.background = color(0.7, 0.5, 1.00);
+
+    cam.lookfrom = point3(0, 11, 10);  // Position inside the cube
+    cam.vfov = 90;             
+    cam.lookat   = point3(200,0,0);
     cam.vup      = vec3(0,1,0);
 
     cam.defocus_angle = 0;
@@ -378,5 +410,6 @@ int main(int argc, const char * argv[]) {
         case 8: diamond_block_scene(); break;
         case 9: tri_test_scene(); break;
         case 10: obj_test_scene(); break;
+        case 11: skybox_test_scene(); break;
     }
 }
