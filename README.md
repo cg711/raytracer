@@ -5,13 +5,14 @@
 - [x] A camera with configurable position, orientation, and field of view
 - [x] Anti-aliasing
 - [x] Ray/sphere intersections
-- [ ] Ray/triangle intersections
+- [x] Ray/triangle intersections
 - [x] The ability to load textures (file format(s) of your choice; may use third-party libraries)
-- [ ] Textured spheres and triangles
+- [x] Textured spheres and triangles
   - [x] Spheres
-  - [ ] Triangles
-- [ ] The ability to load and render triangle meshes (file format(s) of your choice; may use third-party libraries for loading)
+  - [x] Triangles
+- [x] The ability to load and render triangle meshes (file format(s) of your choice; may use third-party libraries for loading)
   - [x] Image loading
+  - [x] OBJ Files
 - [x] A spatial subdivision acceleration structure of your choice
   - [x] BVH
 - [x] Specular, diffuse, and dielectric materials (per first volume of Ray Tracing in One Weekend series)
@@ -22,6 +23,7 @@
 - [x] Volume rendering (smoke, clouds, etc.) (10)
 - [x] Perlin noise (10)
 - [x] Quads (10)
+- [x] Parralelization (10)
 
 ### Compile
 

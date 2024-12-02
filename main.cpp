@@ -325,6 +325,41 @@ void tri_test_scene() {
     cam.render(world);
 }
 
+void obj_test_scene() {
+    hittable_list world;
+
+    // Floor
+    world.add(make_shared<sphere>(point3(0,-1000,0), 1000, make_shared<lambertian>(make_shared<checker_texture>(0.32, color(.2, .3, .1), color(.9, .9, .9)))));
+
+
+    // Mats
+    auto red = make_shared<metal>(color(.65, .05, .05), 0.5);
+    // auto diamond_block_texture = make_shared<image_texture>("diamond.jpg");
+
+    // Solid color triangle
+    world.add(mesh("teapot.obj", red));
+
+    // Textured triangle
+    // world.add(make_shared<tri>(point3( 3,-2, 1), vec3(0, 0, 4), vec3(0, 4, 0), make_shared<lambertian>(diamond_block_texture)));
+
+    camera cam;
+
+    cam.aspect_ratio      = 1.0;
+    cam.image_width       = 400;
+    cam.samples_per_pixel = 100;
+    cam.max_depth         = 50;
+    cam.background = color(0.7, 0.5, 1.00);
+
+    cam.vfov     = 80;
+    cam.lookfrom = point3(0,5,10);
+    cam.lookat   = point3(0,0,0);
+    cam.vup      = vec3(0,1,0);
+
+    cam.defocus_angle = 0;
+
+    cam.render(world);
+}
+
 int main(int argc, const char * argv[]) {
     if (argc != 2) {
         printf("Usage: ./main <scene number>");
@@ -342,5 +377,6 @@ int main(int argc, const char * argv[]) {
         case 7: cornell_smoke_scene(); break;
         case 8: diamond_block_scene(); break;
         case 9: tri_test_scene(); break;
+        case 10: obj_test_scene(); break;
     }
 }

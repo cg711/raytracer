@@ -4,6 +4,9 @@
 #include "hittable.h"
 #include "material.h"
 
+#include <thread>
+#include <vector>
+
 class camera {
 
     public:
@@ -23,26 +26,54 @@ class camera {
         double focus_dist = 10;
 
         void render(const hittable& world) {
-
             initialize();
 
-            // Render
-            std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
-            // auto image_size = image_width * image_height;
+            int lines_left = image_height;
 
-            for (int j = 0; j < image_height; j++) {
-                std::clog << "\nScanlines remaining: " << (image_height - j) << ' ' << std::flush;
-                for (int i = 0; i < image_width; i++) {
-                    color pixel_color(0,0,0);
-                    for (int sample = 0; sample < samples_per_pixel; sample++) {
-                        ray r = get_ray(i,j);
-                        pixel_color += ray_color(r,max_depth,world);
+            std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
+
+            std::vector<color> framebuffer(image_width * image_height);
+
+            // Divide rendering into threads
+            const int num_threads = std::thread::hardware_concurrency();
+            std::vector<std::thread> threads;
+
+            auto render_chunk = [&](int start, int end) {
+                for (int j = start; j < end; j++) {
+                    std::clog << "\nScanlines remaining: " << lines_left << ' ' << std::flush;
+                    for (int i = 0; i < image_width; i++) {
+                        color pixel_color(0, 0, 0);
+                        for (int sample = 0; sample < samples_per_pixel; sample++) {
+                            ray r = get_ray(i, j);
+                            pixel_color += ray_color(r, max_depth, world);
+                        }
+                        framebuffer[j * image_width + i] = pixel_samples_scale * pixel_color;
                     }
-                    write_color(std::cout, pixel_samples_scale * pixel_color);
-                    // std::cout << "Progress: " << ((j * image_height) * (i * image_width) / image_size) * 100 << "%\n";
+                    --lines_left;
+                }
+            };
+
+            // Launch threads
+            int chunk_size = image_height / num_threads;
+            for (int t = 0; t < num_threads; t++) {
+                int start = t * chunk_size;
+                int end = (t == num_threads - 1) ? image_height : start + chunk_size;
+                threads.emplace_back(render_chunk, start, end);
+            }
+
+            // Join threads
+            for (auto& thread : threads) {
+                thread.join();
+            }
+
+            // Write framebuffer to stdout
+            for (int j = 0; j < image_height; j++) {
+                for (int i = 0; i < image_width; i++) {
+                    write_color(std::cout, framebuffer[j * image_width + i]);
                 }
             }
         }
+
     private:
         int image_height;
         double pixel_samples_scale;
