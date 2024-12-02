@@ -18,15 +18,18 @@
 - [x] Specular, diffuse, and dielectric materials (per first volume of Ray Tracing in One Weekend series)
 - [x] Emissive materials (lights)
 
-### Extra Needed (25 base, 75 for A)
+### Extra Needed (75/75)
 - [x] Motion blur (10)
 - [x] Volume rendering (smoke, clouds, etc.) (10)
 - [x] Perlin noise (10)
 - [x] Quads (10)
-- [x] Parralelization (10)
+- [x] Parallelization (10)
+- [x] Cube map (15)
+- [x] Defocus blur/depth of field (10)
+ 
 
 ### Compile
 
 ```
-g++ -std=c++11 main.cpp -o main
+g++ -std=c++11 main.cpp third_party/tiny_obj_loader.cc -o main
 ```

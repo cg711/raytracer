@@ -331,14 +331,22 @@ void obj_test_scene() {
     // Floor
     world.add(make_shared<sphere>(point3(0,-1000,0), 1000, make_shared<lambertian>(make_shared<checker_texture>(0.32, color(.2, .3, .1), color(.9, .9, .9)))));
 
-
     // Mats
     auto red = make_shared<metal>(color(.65, .05, .05), 0.5);
-    auto ceramic_texture = make_shared<image_texture>("ceramic.jpg");
+    // auto ceramic_texture = make_shared<image_texture>("ceramic.jpg");
 
     // Solid color triangle
-    world.add(mesh("teapot.obj", make_shared<metal>(ceramic_texture, 0.8)));
+    world.add(mesh("teapot.obj", red));
     // world.add
+    // skybox textures
+    auto left = make_shared<image_texture>("skybox/left.jpg");
+    auto right = make_shared<image_texture>("skybox/right.jpg");
+    auto top = make_shared<image_texture>("skybox/top.jpg");
+    auto bottom = make_shared<image_texture>("skybox/bottom.jpg");
+    auto front = make_shared<image_texture>("skybox/front.jpg");
+    auto back = make_shared<image_texture>("skybox/back.jpg");
+
+    world.add(cube_map(left,right,front,back,top,bottom,100));
 
     // Textured triangle
     // world.add(make_shared<tri>(point3( 3,-2, 1), vec3(0, 0, 4), vec3(0, 4, 0), make_shared<lambertian>(diamond_block_texture)));
