@@ -1,6 +1,22 @@
-# TODO
+# Casey Gehling -- Raytracer
 
-## Mandatory
+## Usage
+
+1. Build:
+```
+make
+```
+Alternativley:
+```
+g++ -std=c++11 main.cpp third_party/tiny_obj_loader.cc -o main
+```
+
+2. Run:
+```
+./main <scene_number> > <image_file.ppm>
+```
+
+## Features
 
 - [x] A camera with configurable position, orientation, and field of view
 - [x] Anti-aliasing
@@ -18,7 +34,7 @@
 - [x] Specular, diffuse, and dielectric materials (per first volume of Ray Tracing in One Weekend series)
 - [x] Emissive materials (lights)
 
-### Extra Needed (75/75)
+### Extra Features
 - [x] Motion blur (10)
 - [x] Volume rendering (smoke, clouds, etc.) (10)
 - [x] Perlin noise (10)
