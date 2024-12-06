@@ -1,4 +1,9 @@
-// abstract class for any hittable object (spheres, cubes, volumetric fog, etc.)
+/**
+ * Casey Gehling
+ * 
+ * Abstract class for any hittable object (spheres, cubes, volumetric fog, etc.)
+ * Hittables must override hit functionality for proper intersection logic.
+ */
 #ifndef HITTABLE_H
 #define HITTABLE_H
 
@@ -30,6 +35,7 @@ class hittable {
         virtual aabb bounding_box() const = 0;
 };
 
+// Wrapper for pre-instantiated hittable. Translate intersectable by specified offset vector.
 class translate : public hittable {
     public:
         translate(shared_ptr<hittable> object, const vec3& offset) : object(object), offset(offset) {
@@ -53,7 +59,7 @@ class translate : public hittable {
         vec3 offset;
         aabb bbox;
 };
-
+// Wrapper for pre-instantiated hittable. Rotate intersectable by specified angle offset.
 class rotate_y : public hittable {
     public:
         rotate_y(shared_ptr<hittable> object, double angle) : object(object) {

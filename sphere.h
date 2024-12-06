@@ -1,3 +1,10 @@
+/**
+ * Casey Gehling
+ * 
+ * Defines sphere intersection logic.
+ */
+
+
 #ifndef SPHERE_H
 #define SPHERE_H
 

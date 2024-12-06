@@ -1,3 +1,10 @@
+/**
+ * Casey Gehling
+ * 
+ * Defines multiple scenes to be rendered.
+ * Usage: ./main <scene_number> > <output_file.ppm>
+ */
+
 #include "constants.h"
 #include "camera.h"
 #include "material.h"
@@ -9,99 +16,9 @@
 #include "constant_medium.h"
 #include "tri.h"
 
-void bouncing_spheres_scene() {
-    hittable_list world;
-
-    auto ground_material = make_shared<checker_texture>(0.32, color(0.5,0.3,0.1), color(0.9,0.9,0.9));
-    world.add(make_shared<sphere>(point3(0,-1000,0), 1000, make_shared<lambertian>(ground_material)));
-
-    for (int a = -11; a < 11; a++) {
-        for (int b = -11; b < 11; b++) {
-            auto choose_mat = random_double();
-            point3 center(a + 0.9*random_double(), 0.2, b + 0.9*random_double());
-
-            if ((center - point3(4, 0.2, 0)).length() > 0.9) {
-                shared_ptr<material> sphere_material;
-
-                if (choose_mat < 0.8) {
-                    // diffuse
-                    auto albedo = color::random() * color::random();
-                    sphere_material = make_shared<lambertian>(albedo);
-                    auto center2 = center + vec3(0, random_double(0,.5), 0);
-                    world.add(make_shared<sphere>(center, center2, 0.2, sphere_material));
-                } else if (choose_mat < 0.95) {
-                    // metal
-                    auto albedo = color::random(0.5, 1);
-                    auto fuzz = random_double(0, 0.5);
-                    sphere_material = make_shared<metal>(albedo, fuzz);
-                    world.add(make_shared<sphere>(center, 0.2, sphere_material));
-                } else {
-                    // glass
-                    sphere_material = make_shared<dielectric>(1.5);
-                    world.add(make_shared<sphere>(center, 0.2, sphere_material));
-                }
-            }
-        }
-    }
-
-    auto material1 = make_shared<dielectric>(1.5);
-    world.add(make_shared<sphere>(point3(0, 1, 0), 1.0, material1));
-
-    auto material2 = make_shared<lambertian>(color(0.4, 0.2, 0.1));
-    world.add(make_shared<sphere>(point3(-4, 1, 0), 1.0, material2));
-
-    auto material3 = make_shared<metal>(color(0.7, 0.6, 0.5), 0.0);
-    world.add(make_shared<sphere>(point3(4, 1, 0), 1.0, material3));
-
-    world = hittable_list(make_shared<bvh_node>(world));
-
-    camera cam;
-
-    cam.aspect_ratio      = 16.0 / 9.0;
-    cam.image_width       = 400;
-    cam.samples_per_pixel = 100;
-    cam.max_depth         = 50;
-    cam.background = color(0.7, 0.5, 1.00);
-
-    cam.vfov     = 20;
-    cam.lookfrom = point3(13,2,3);
-    cam.lookat   = point3(0,0,0);
-    cam.vup      = vec3(0,1,0);
-
-    cam.defocus_angle = 0.6;
-    cam.focus_dist    = 10.0;
-
-    cam.render(world);
-}
-
-void checkered_spheres_scene() {
-    hittable_list world;
-
-    auto checker = make_shared<checker_texture>(0.32, color(.2, .3, .1), color(.9, .9, .9));
-
-    world.add(make_shared<sphere>(point3(0,-10, 0), 10, make_shared<lambertian>(checker)));
-    world.add(make_shared<sphere>(point3(0, 10, 0), 10, make_shared<lambertian>(checker)));
-
-    camera cam;
-
-    cam.aspect_ratio      = 16.0 / 9.0;
-    cam.image_width       = 400;
-    cam.samples_per_pixel = 100;
-    cam.max_depth         = 50;
-    cam.background = color(0.7, 0.5, 1.00);
-
-    cam.vfov     = 20;
-    cam.lookfrom = point3(13,2,3);
-    cam.lookat   = point3(0,0,0);
-    cam.vup      = vec3(0,1,0);
-
-    cam.defocus_angle = 0;
-
-    cam.render(world);
-}
 
 void moon_scene() {
-    auto moon_texture = make_shared<image_texture>("./moon_texture.jpeg");
+    auto moon_texture = make_shared<image_texture>("textures/moon_texture.jpeg");
     auto moon_surface = make_shared<lambertian>(moon_texture);
     auto moon = make_shared<sphere>(point3(0,0,0), 2, moon_surface);
 
@@ -264,13 +181,9 @@ void diamond_block_scene() {
     world.add(make_shared<sphere>(point3(0,-1000,0), 1000, make_shared<lambertian>(make_shared<checker_texture>(0.32, color(.2, .3, .1), color(.9, .9, .9)))));
 
     // Diamond block
-    auto diamond_block_texture = make_shared<image_texture>("diamond.jpg");
+    auto diamond_block_texture = make_shared<image_texture>("textures/diamond.jpg");
     shared_ptr<hittable> diamond_block = box(point3(0,0,0), point3(2,2,2), make_shared<lambertian>(diamond_block_texture));
     world.add(diamond_block);
-
-    // // Light
-    // auto difflight = make_shared<diffuse_light>(color(10,10,10));
-    // world.add(make_shared<sphere>(point3(0,200,0), 20, difflight));
 
     camera cam;
 
@@ -293,13 +206,10 @@ void diamond_block_scene() {
 void tri_test_scene() {
     hittable_list world;
 
-    // Floor
-    // world.add(make_shared<sphere>(point3(0,-1000,0), 1000, make_shared<lambertian>(make_shared<checker_texture>(0.32, color(.2, .3, .1), color(.9, .9, .9)))));
-
 
     // Mats
     auto red = make_shared<lambertian>(color(.65, .05, .05));
-    auto diamond_block_texture = make_shared<image_texture>("diamond.jpg");
+    auto diamond_block_texture = make_shared<image_texture>("textures/diamond.jpg");
 
     // Solid color triangle
     world.add(make_shared<tri>(point3(-3,-2, 5), vec3(0, 0,-4), vec3(0, 4, 0), red));
@@ -333,11 +243,10 @@ void obj_test_scene() {
 
     // Mats
     auto red = make_shared<metal>(color(.65, .05, .05), 0.5);
-    // auto ceramic_texture = make_shared<image_texture>("ceramic.jpg");
 
     // Solid color triangle
-    world.add(mesh("teapot.obj", red));
-    // world.add
+    world.add(mesh("models/sword.obj", red));
+
     // skybox textures
     auto left = make_shared<image_texture>("skybox/left.jpg");
     auto right = make_shared<image_texture>("skybox/right.jpg");
@@ -347,9 +256,6 @@ void obj_test_scene() {
     auto back = make_shared<image_texture>("skybox/back.jpg");
 
     world.add(cube_map(left,right,front,back,top,bottom,100));
-
-    // Textured triangle
-    // world.add(make_shared<tri>(point3( 3,-2, 1), vec3(0, 0, 4), vec3(0, 4, 0), make_shared<lambertian>(diamond_block_texture)));
 
     camera cam;
 
@@ -364,7 +270,7 @@ void obj_test_scene() {
     cam.lookat   = point3(0,0,0);
     cam.vup      = vec3(0,1,0);
 
-    cam.defocus_angle = 0;
+    cam.defocus_angle = 3;
 
     cam.render(world);
 }
@@ -400,24 +306,161 @@ void skybox_test_scene() {
     cam.render(world);
 }
 
+void ray_intersection_scene() {
+    hittable_list world;
+    auto red = make_shared<lambertian>(color(.65, .05, .05));
+
+    world.add(make_shared<sphere>(point3(-2,0, 0), 3, make_shared<lambertian>(color(0.5,0.5,0.5))));
+    world.add(make_shared<tri>(point3(5,-2, 5), vec3(0, 0,-4), vec3(0, 4, 0), red));
+
+    camera cam;
+
+    cam.aspect_ratio      = 1.0;
+    cam.image_width       = 400;
+    cam.samples_per_pixel = 100;
+    cam.max_depth         = 500;
+    cam.background = color(0.7, 0.5, 1.00);
+
+    cam.lookfrom = point3(0, 11, 10);  // Position inside the cube
+    cam.vfov = 90;             
+    cam.lookat   = point3(0,0,0);
+    cam.vup      = vec3(0,1,0);
+
+    cam.defocus_angle = 0;
+
+    cam.render(world);
+
+}
+
+void volume_scene() {
+    hittable_list world;
+
+    auto sphere_ob = make_shared<sphere>(point3(0,3, 0), 3, make_shared<lambertian>(color(0,0,0)));
+    world.add(make_shared<constant_medium>(sphere_ob, 0.5, color(0,0,0)));
+    world.add(make_shared<sphere>(point3(0,-1000,0), 1000, make_shared<lambertian>(make_shared<checker_texture>(0.32, color(.2, .3, .1), color(.9, .9, .9)))));
+
+    camera cam;
+
+    cam.aspect_ratio      = 1.0;
+    cam.image_width       = 400;
+    cam.samples_per_pixel = 200;
+    cam.max_depth         = 500;
+    cam.background = color(1, 1, 1.00);
+
+    cam.lookfrom = point3(0, 8, 6);  // Position inside the cube
+    cam.vfov = 90;             
+    cam.lookat   = point3(0,0,0);
+    cam.vup      = vec3(0,1,0);
+
+    cam.defocus_angle = 0;
+
+    cam.render(world);
+}
+
+void motion_blur_scene() {
+    hittable_list world;
+
+    auto sphere_ob = make_shared<sphere>(point3(0,3, 0), point3(0,0,0), 3, make_shared<lambertian>(color(0,0,0)));
+    world.add(sphere_ob);
+
+    camera cam;
+
+    cam.aspect_ratio      = 1.0;
+    cam.image_width       = 400;
+    cam.samples_per_pixel = 200;
+    cam.max_depth         = 500;
+    cam.background = color(1, 1, 1.00);
+
+    cam.lookfrom = point3(0, 8, 6);  // Position inside the cube
+    cam.vfov = 90;             
+    cam.lookat   = point3(0,0,0);
+    cam.vup      = vec3(0,1,0);
+
+    cam.defocus_angle = 0;
+
+    cam.render(world);
+}
+
+void perlin_ball_scene() {
+    hittable_list world;
+
+    auto tex1 = make_shared<noise_texture>(0);
+    auto tex2 = make_shared<noise_texture>(4);
+    world.add(make_shared<sphere>(point3(-3.5,3, 0), 3, make_shared<lambertian>(tex1)));
+    world.add(make_shared<sphere>(point3(3.5,3, 0), 3, make_shared<lambertian>(tex2)));
+
+    world.add(make_shared<sphere>(point3(0,-1000,0), 1000, make_shared<lambertian>(make_shared<checker_texture>(0.32, color(.2, .3, .1), color(.9, .9, .9)))));
+
+    camera cam;
+
+    cam.aspect_ratio      = 1.0;
+    cam.image_width       = 400;
+    cam.samples_per_pixel = 200;
+    cam.max_depth         = 500;
+    cam.background = color(1, 1, 1.00);
+
+    cam.lookfrom = point3(0, 9, 7);  // Position inside the cube
+    cam.vfov = 90;             
+    cam.lookat   = point3(0,0,0);
+    cam.vup      = vec3(0,1,0);
+
+    cam.defocus_angle = 0;
+
+    cam.render(world);
+}
+
+void materials_scene() {
+    hittable_list world;
+    // auto sphere_ob = make_shared<sphere>(point3(0,3, 0), 3, make_shared<perlin>());
+    world.add(make_shared<sphere>(point3(-3,3, 0), 1, make_shared<lambertian>(color(0.5,1,0.5))));
+    world.add(make_shared<sphere>(point3(0,3, 0), 1, make_shared<metal>(color(1,0.5,0.5), 0.5)));
+    world.add(make_shared<sphere>(point3(3,3, 0), 1, make_shared<dielectric>(0.5)));
+    world.add(make_shared<sphere>(point3(-3,6, -1), 0.5, make_shared<diffuse_light>(color(7,7,7))));
+    world.add(make_shared<sphere>(point3(0,6, -1), 0.5, make_shared<diffuse_light>(color(7,7,7))));
+    world.add(make_shared<sphere>(point3(3,6, -1), 0.5, make_shared<diffuse_light>(color(7,7,7))));
+
+
+    world.add(make_shared<sphere>(point3(0,-1000,0), 1000, make_shared<lambertian>(make_shared<checker_texture>(0.32, color(.2, .3, .1), color(.9, .9, .9)))));
+
+    camera cam;
+
+    cam.aspect_ratio      = 1.0;
+    cam.image_width       = 400;
+    cam.samples_per_pixel = 200;
+    cam.max_depth         = 500;
+    cam.background = color(0.5, 0.5, 0.5);
+
+    cam.lookfrom = point3(0, 3, -5);  // Position inside the cube
+    cam.vfov = 90;             
+    cam.lookat   = point3(0,3,10);
+    cam.vup      = vec3(0,1,0);
+
+    cam.defocus_angle = 0;
+
+    cam.render(world);
+}
+
 int main(int argc, const char * argv[]) {
     if (argc != 2) {
-        printf("Usage: ./main <scene number>");
+        printf("Usage: ./main <scene_number> > <output_file.ppm>");
         return -1;
     }
     int scene = atoi(argv[1]);
 
     switch(scene) {
-        case 1: bouncing_spheres_scene(); break;
-        case 2: checkered_spheres_scene(); break;
-        case 3: moon_scene(); break;
-        case 4: perlin_scene(); break;
-        case 5: quads_scene(); break;
-        case 6: light_scene(); break;
-        case 7: cornell_smoke_scene(); break;
-        case 8: diamond_block_scene(); break;
-        case 9: tri_test_scene(); break;
-        case 10: obj_test_scene(); break;
-        case 11: skybox_test_scene(); break;
+        case 1: moon_scene(); break;
+        case 2: perlin_scene(); break;
+        case 3: quads_scene(); break;
+        case 4: light_scene(); break;
+        case 5: cornell_smoke_scene(); break;
+        case 6: diamond_block_scene(); break;
+        case 7: tri_test_scene(); break;
+        case 8: obj_test_scene(); break;
+        case 9: skybox_test_scene(); break;
+        case 10: ray_intersection_scene(); break;
+        case 11: volume_scene(); break;
+        case 12: motion_blur_scene(); break;
+        case 13: perlin_ball_scene(); break;
+        case 14: materials_scene(); break;
     }
 }

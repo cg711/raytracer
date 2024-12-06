@@ -1,3 +1,9 @@
+/**
+ * Casey Gehling
+ * 
+ * Defines bounding volume hierarchy. A tree datastructure used to organize the bounding volumes within a scene
+ * for acceleration and collision purposes.
+ */
 #ifndef BVH_H
 #define BVH_H
 #include "aabb.h"

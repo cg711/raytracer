@@ -1,3 +1,9 @@
+/**
+ * Casey Gehling
+ * 
+ * Provides ray class definitions.
+ */
+
 #ifndef RAY_H
 #define RAY_H
 
@@ -15,7 +21,7 @@ class ray {
         const vec3& direction() const { return dir; }
 
         double time() const {return tm;}
-
+        
         point3 at(double t) const {
             return orig + t * dir;
         }

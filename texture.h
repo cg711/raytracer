@@ -1,3 +1,9 @@
+/**
+ * Casey Gehling
+ * 
+ * Defines multiple textures applicable to textured lambertian/metal surfaces.
+ */
+
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
@@ -10,6 +16,7 @@ class texture {
         virtual color value(double u, double v, const point3& p) const = 0;
 };
 
+// Image texture mapping
 class image_texture : public texture {
     public:
         image_texture(const char* filename) : image(filename) {}
@@ -31,6 +38,7 @@ class image_texture : public texture {
         rtw_image image;
 };
 
+// Perlin noise texture
 class noise_texture : public texture {
     public:
         noise_texture(double scale) : scale(scale) {}
@@ -44,6 +52,7 @@ class noise_texture : public texture {
         double scale;
 };
 
+// Solid color texture (default lambertian)
 class solid_color : public texture {
     public:
         solid_color(const color& albedo) : albedo(albedo) {}
@@ -57,6 +66,7 @@ class solid_color : public texture {
         color albedo;
 };
 
+// Checkered texture -- alternate between two colors.
 class checker_texture : public texture {
     public:
         checker_texture(double scale, shared_ptr<texture> even, shared_ptr<texture> odd)

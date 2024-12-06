@@ -1,7 +1,14 @@
+/**
+ * Casey Gehling
+ * 
+ * Defines perlin noise implementation for generating pseudo-random perlin noise.
+ * Includes optional turbulance smoothing.
+ */
+
+
 #ifndef PERLIN_H
 #define PERLIN_H
 
-// perlin noise
 class perlin {
     public:
         perlin() {

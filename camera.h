@@ -1,3 +1,10 @@
+/**
+ * Casey Gehling
+ * 
+ * Defines raytracer camera functionality. Models behavior over pinhole camera, includes
+ * configurable options for camera position, viewport, sampling rate, and focus angle.
+ *  
+ */
 #ifndef CAMERA_H
 #define CAMERA_H
 
@@ -12,15 +19,15 @@ class camera {
     public:
         // Image config
         double aspect_ratio = 1.0;
-        int image_width = 100;
-        int samples_per_pixel = 10;
+        int image_width = 100; // image output width
+        int samples_per_pixel = 10; // sampling rate
         int max_depth = 10; // max recursion depth, i..e max number of ray "bounces" into scene
         color background; // scene background color
 
         double vfov = 90; // vertical fov
-        point3 lookfrom = point3(0,0,0);
-        point3 lookat = point3(0,0,-1);
-        vec3 vup = vec3(0,1,0);
+        point3 lookfrom = point3(0,0,0); // camera position in scene
+        point3 lookat = point3(0,0,-1); // camera point direction
+        vec3 vup = vec3(0,1,0); // camera up vector
 
         double defocus_angle = 0;
         double focus_dist = 10;
@@ -38,8 +45,10 @@ class camera {
             const int num_threads = std::thread::hardware_concurrency();
             std::vector<std::thread> threads;
 
+            // Per thread, render equally divided chunk of lines. 
             auto render_chunk = [&](int start, int end) {
                 for (int j = start; j < end; j++) {
+                    // Render debug output
                     std::clog << "\nScanlines remaining: " << lines_left << ' ' << std::flush;
                     for (int i = 0; i < image_width; i++) {
                         color pixel_color(0, 0, 0);
@@ -154,6 +163,7 @@ class camera {
                 return background;
             }
 
+            // otherwise, calculate color and draw.
             ray scattered;
             color attenuation;
             color emission_color = rec.mat->emitted(rec.u, rec.v, rec.p);

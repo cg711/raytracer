@@ -1,4 +1,9 @@
-// 3D Vector definitions
+/**
+ * Casey Gehling
+ * 
+ * Defines vec3 type, <x,y,z> valued tuple.
+ */
+
 
 #ifndef VEC3_H
 #define VEC3_H

@@ -1,3 +1,9 @@
+/**
+ * Casey Gehling
+ * 
+ * Defines intersection logic for a constant medium. Used in tandum with isotropic materials
+ * to provide volumetric output.
+ */
 #ifndef CONSTANT_MEDIUM_H
 #define CONSTANT_MEDIUM_H
 
@@ -8,8 +14,11 @@
 
 class constant_medium : public hittable {
     public:
+
+        // Define medium boundary, density, and texture.
         constant_medium(shared_ptr<hittable> boundary, double density, shared_ptr<texture> texture) : boundary(boundary), neg_inverse_density(-1 / density), phase_function(make_shared<isotropic>(texture)) {}
 
+        // Define medium boundary, density, and constant color.
         constant_medium(shared_ptr<hittable> boundary, double density, const color& albedo) : boundary(boundary), neg_inverse_density(-1 / density), phase_function(make_shared<isotropic>(albedo)) {}
 
         bool hit(const ray& r, interval ray_t, hit_record& rec) const override {

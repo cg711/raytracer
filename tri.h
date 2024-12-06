@@ -1,3 +1,10 @@
+/**
+ * Casey Gehling
+ * 
+ * Defines tri intersection logic as well as mesh import and rendering logic.
+ */
+
+
 #ifndef TRI_H
 #define TRI_H
 
@@ -75,6 +82,8 @@ class tri : public hittable {
         double D;
 };
 
+
+// Takes .obj file path input and material, parses obj into individual tris returned in hittable list.
 inline shared_ptr<hittable_list> mesh(
     std::string input_file,
     shared_ptr<material> mat

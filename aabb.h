@@ -1,3 +1,9 @@
+/**
+ * Casey Gehling
+ * 
+ * Defines bounding boxes, used by all bounding volumes.
+ */
+
 #ifndef AABB_H
 #define AABB_H
 

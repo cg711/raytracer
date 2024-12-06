@@ -1,3 +1,9 @@
+/**
+ * Casey Gehling
+ * 
+ * Defines interval utility for use in defining explicit ranges of values.
+ */
+
 #ifndef INTERVAL_H
 #define INTERVAL_H
 
@@ -35,7 +41,7 @@ class interval {
 
         // increase interval padding by specified delta
         interval expand(double delta) const {
-            auto padding = delta/2;
+            auto padding = delta / 2;
             return interval(min - padding, max + padding);
         }
 

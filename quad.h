@@ -1,3 +1,9 @@
+/**
+ * Casey Gehling
+ * 
+ * Defines quad intersection logic as well as box instance mesh generation and cub map generation.
+ */
+
 #ifndef QUAD_H
 #define QUAD_H
 

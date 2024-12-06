@@ -1,7 +1,13 @@
+/**
+ * Casey Gehling
+ * 
+ * Helper for image loading.
+ */
+
+
 #ifndef RTW_STB_IMAGE_H
 #define RTW_STB_IMAGE_H
 
-// Disable strict warnings for this header from the Microsoft Visual C++ compiler.
 #ifdef _MSC_VER
     #pragma warning (push, 0)
 #endif

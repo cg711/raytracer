@@ -1,3 +1,9 @@
+/**
+ * Casey Gehling
+ * 
+ * Defines a list data structure used to store a series of hittable objects.
+ */
+
 #ifndef HITTABLE_LIST_H
 #define HITTABLE_LIST_H
 
@@ -12,8 +18,6 @@ class hittable_list : public hittable {
 
         hittable_list() {}
         hittable_list(shared_ptr<hittable> object) { add(object); }
-
-        // ~hittable_list() override = default;
 
         void clear() {objects.clear();}
 

@@ -1,3 +1,8 @@
+/**
+ * Casey Gehling
+ * 
+ * Defines color type -- inherits vec3 type structure.
+ */
 #ifndef COLOR_H
 #define COLOR_H
 
@@ -14,6 +19,7 @@ inline double linear_to_gamma(double linear_component) {
     return 0;
 }
 
+// Write ray color to output stream written into pixel map. Configured only for ppm image type usage.
 void write_color(std::ostream& out, const color& pixel_color) {
     auto r = pixel_color.x();
     auto g = pixel_color.y();
